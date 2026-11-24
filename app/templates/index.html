@@ -27,6 +27,39 @@
       <div class="panel-head"><h2>运行对账</h2></div>
       <div class="ledger" id="ledger-list"></div>
     </article>
+    <article class="panel" id="panel-settlement">
+      <div class="panel-head"><h2>顺位结算 · 追回补付</h2><span class="hint" id="settle-count">--</span></div>
+      <div class="settle-form">
+        <label>理赔号 <input id="st-claim" placeholder="K10"></label>
+        <label>成员 <input id="st-member" placeholder="M1"></label>
+        <label>服务日 <input id="st-date" placeholder="2026-11-10"></label>
+        <label>支付方
+          <select id="st-payer"><option>MEDICARE</option><option>PRIVATE</option><option>SELF</option></select>
+        </label>
+        <label>票据上限(分) <input id="st-billed" type="number" placeholder="10000"></label>
+        <label>核准(分) <input id="st-approved" type="number" placeholder="8000"></label>
+        <label class="check"><input id="st-late" type="checkbox"> 晚到高顺位件（触发重算）</label>
+        <button id="st-register" type="button">登记理赔</button>
+      </div>
+      <div class="settle-form">
+        <label>结算组 <input id="st-group" placeholder="M1|2026-11-10"></label>
+        <label>追回理赔号 <input id="st-recover-claim" placeholder="K2"></label>
+        <label>追回额(分) <input id="st-recover-amount" type="number" placeholder="8000"></label>
+        <label>确认键 <input id="st-recover-key" placeholder="REC-1（同键重试幂等）"></label>
+        <button id="st-recover" type="button">确认追回并补付</button>
+        <button id="st-refresh" type="button">刷新台账</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>结算组</th><th>支付方</th><th>理赔号</th><th>应付</th><th>已付</th><th>已追回</th>
+            <th>净实付</th><th>待补</th><th>待追回</th><th>状态</th>
+          </tr></thead>
+          <tbody id="settle-body"></tbody>
+        </table>
+      </div>
+      <div class="ledger" id="settle-summary"></div>
+    </article>
     <article class="panel" id="panel-review">
       <div class="panel-head"><h2>批次复核</h2><span class="hint" id="revision">rev 0</span></div>
       <div class="review">

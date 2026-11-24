@@ -15,6 +15,8 @@
 | M5 运行对账 | 核对来源行、采信、隔离、重复与计算条目 | `POST /api/stages/reconcile` | `app/reconcile/ledger.py` | `tests/test_reconcile.py` |
 | M6 批次复核 | 带版本号签发或暂缓，拒绝陈旧复核 | `POST /api/runs/{id}/review` | `app/review/service.py` | `tests/test_review.py` |
 | M7 证据交付 | 仅在签发后输出可校验的复核证据 | `GET /api/runs/{id}/evidence` | `app/evidence/render.py` | `tests/test_evidence.py` |
+| M8 顺位结算 | 晚到高顺位重算、净实付守上限、当天部分付款 | `POST /api/settlement/claims` | `app/settlement/ledger.py` | `tests/test_settlement_domain.py` |
+| M9 追回补付 | 追回确认后按顺位补付，确认键幂等防重复补付 | `POST /api/settlement/groups/{id}/recoveries` | `app/settlement/service.py`、`app/settlement/store.py` | `tests/test_settlement_http.py` |
 
 ## 输入陷阱
 

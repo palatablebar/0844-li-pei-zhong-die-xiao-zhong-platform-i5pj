@@ -140,4 +140,81 @@
     });
   }
   document.addEventListener('DOMContentLoaded', boot);
+
+  // 顺位结算：晚到高顺位重算、追回确认与待补补付的工作台核对
+  async function settleRequest(url, options) {
+    var response = await fetch(url, Object.assign({headers: {'Content-Type': 'application/json'}}, options || {}));
+    var data = await response.json().catch(function () { return {}; });
+    if (!response.ok) throw new Error(data.error || ('HTTP ' + response.status));
+    return data;
+  }
+  function num(value) { return String(value); }
+  function renderSettlement(groups) {
+    var body = $('settle-body');
+    $('settle-count').textContent = groups.length + ' 个结算组';
+    if (!groups.length) {
+      body.innerHTML = '<tr><td class="empty" colspan="10">暂无结算组，先登记理赔</td></tr>';
+      $('settle-summary').innerHTML = '';
+      return;
+    }
+    body.innerHTML = groups.map(function (group) {
+      return group.claims.map(function (row) {
+        var state = row.settled ? '已结清' : (row.pending_topup_cents > 0 ? '待补付' : '待追回');
+        return '<tr>' +
+          '<td>' + esc(group.group_id) + '</td><td>' + esc(row.payer) + (row.late ? ' <small>晚到</small>' : '') + '</td>' +
+          '<td>' + esc(row.claim_id) + '</td>' +
+          '<td class="num">' + num(row.due_cents) + '</td><td class="num">' + num(row.paid_cents) + '</td>' +
+          '<td class="num">' + num(row.recovered_cents) + '</td><td class="num">' + num(row.net_paid_cents) + '</td>' +
+          '<td class="num">' + num(row.pending_topup_cents) + '</td><td class="num">' + num(row.overpaid_recovery_cents) + '</td>' +
+          '<td>' + esc(state) + '</td></tr>';
+      }).join('');
+    }).join('');
+    $('settle-summary').innerHTML = groups.map(function (group) {
+      var cap = group.within_cap ? '通过' : '超上限';
+      return '<div class="ledger-row"><span>' + esc(group.group_id) + ' · 净实付/上限</span>' +
+        '<strong class="num">' + num(group.net_paid_total_cents) + ' / ' + num(group.cap_cents) +
+        ' 待补 ' + num(group.pending_topup_total_cents) + ' 待追回 ' + num(group.overpaid_recovery_total_cents) +
+        '</strong><strong class="' + (group.within_cap ? 'check-ok' : 'settle-bad') + '">' + cap + '</strong></div>';
+    }).join('');
+  }
+  async function loadSettlement() {
+    try {
+      var data = await settleRequest('/api/settlement/groups');
+      renderSettlement(data.groups || []);
+    } catch (error) { setNotice(error.message); }
+  }
+  async function registerSettlementClaim() {
+    try {
+      setNotice('');
+      var payload = {
+        claim_id: $('st-claim').value.trim(), member_id: $('st-member').value.trim(),
+        service_date: $('st-date').value.trim(), payer: $('st-payer').value,
+        billed_cents: $('st-billed').value, approved_cents: $('st-approved').value,
+        deductible_cents: 0, late: $('st-late').checked
+      };
+      await settleRequest('/api/settlement/claims', {method: 'POST', body: JSON.stringify(payload)});
+      await loadSettlement();
+    } catch (error) { setNotice(error.message); }
+  }
+  async function confirmSettlementRecovery() {
+    try {
+      setNotice('');
+      var payload = {
+        claim_id: $('st-recover-claim').value.trim(),
+        amount_cents: Number($('st-recover-amount').value),
+        confirmation_key: $('st-recover-key').value.trim()
+      };
+      var view = await settleRequest('/api/settlement/groups/' + encodeURIComponent($('st-group').value.trim()) + '/recoveries',
+        {method: 'POST', body: JSON.stringify(payload)});
+      if (view.idempotent_hit) setNotice('同一确认键已处理，本次为幂等重试，未重复补付');
+      await loadSettlement();
+    } catch (error) { setNotice(error.message); }
+  }
+  function bootSettlement() {
+    $('st-register').addEventListener('click', registerSettlementClaim);
+    $('st-recover').addEventListener('click', confirmSettlementRecovery);
+    $('st-refresh').addEventListener('click', loadSettlement);
+    loadSettlement();
+  }
+  document.addEventListener('DOMContentLoaded', bootSettlement);
 })();

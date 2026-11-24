@@ -5,6 +5,14 @@
 .p0844 .toolbar{border:0;padding-top:20px}
 .p0844 .board{grid-template-columns:1.5fr .5fr;border-top:3px solid var(--accent)}
 .p0844 #panel-table{grid-column:1/-1}.p0844 #panel-review{grid-column:1/-1}
+.p0844 #panel-settlement{grid-column:1/-1}
+.p0844 .settle-form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;padding:10px 0;border-bottom:1px solid var(--line)}
+.p0844 .settle-form label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.p0844 .settle-form label.check{flex-direction:row;align-items:center}
+.p0844 .settle-form input,.p0844 .settle-form select{min-width:120px;padding:6px 8px;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);color:var(--ink)}
+.p0844 .settle-form button{padding:8px 14px;background:var(--accent);color:#21183b;border:0;border-radius:var(--radius);cursor:pointer;font-weight:600}
+.p0844 #settle-body td.num,#settle-summary .num{font-family:var(--num)}
+.p0844 .settle-bad{color:#ff9c9c;font-weight:700}
 .p0844 .panel{border:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
 .p0844 .panel:last-child{border-right:0}
 .p0844 .metric{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}

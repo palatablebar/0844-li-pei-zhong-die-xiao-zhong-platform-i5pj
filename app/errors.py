@@ -18,6 +18,16 @@ MESSAGES = {
     "GATE_BLOCKED": "存在阻断项，不能签发",
     "NOT_APPROVED": "批次尚未签发",
     "BAD_REQUEST": "请求内容不完整",
+    "GROUP_NOT_FOUND": "结算组不存在",
+    "CLAIM_NOT_FOUND": "理赔记录不存在",
+    "BAD_PAYER": "支付方不在支持范围内",
+    "BAD_AMOUNT": "金额字段不合法",
+    "BAD_DATE": "服务日不是合法 ISO 日期",
+    "APPROVED_OVER_BILLED": "核准金额超过票据金额",
+    "GROUP_MISMATCH": "成员或服务日与结算组不一致",
+    "BAD_RECOVERY_AMOUNT": "追回金额必须为正整数",
+    "RECOVERY_OVER_PAID": "追回金额超过该笔净实付",
+    "SETTLEMENT_RULE": "结算规则校验未通过",
 }
 
 
