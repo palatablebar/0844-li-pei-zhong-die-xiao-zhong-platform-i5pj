@@ -1,0 +1,32 @@
+.p0844 .shell{display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr auto}
+.p0844 .rail{display:flex;align-items:center;gap:18px;border:0;border-bottom:2px solid var(--accent);background:var(--surface);padding:9px 18px}
+.p0844 .rail-label,.p0844 .rail-note{display:none}.p0844 #stage-nav{flex-direction:row;gap:0;overflow:auto}
+.p0844 #stage-nav button{border-radius:0;border-width:0 0 0 1px;padding:.5em .9em}
+.p0844 .toolbar{border:0;padding-top:20px}
+.p0844 .board{grid-template-columns:1.5fr .5fr;border-top:3px solid var(--accent)}
+.p0844 #panel-table{grid-column:1/-1}.p0844 #panel-review{grid-column:1/-1}
+.p0844 .panel{border:0;border-right:1px solid var(--line);border-radius:0;background:transparent}
+.p0844 .panel:last-child{border-right:0}
+.p0844 .metric{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}
+
+@media (max-width: 980px) {
+  .p0844 .board { grid-template-columns: minmax(0,1fr) !important; grid-template-areas: none !important; }
+  .p0844 .board > * { grid-column: auto !important; grid-row: auto !important; grid-area: auto !important; }
+  .p0844 .kpis { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+}
+@media (max-width: 680px) {
+  .p0844 .shell { display: block !important; }
+  .p0844 .rail { height: auto !important; min-height: 0 !important; position: static !important; padding: 10px 12px !important; }
+  .p0844 .rail::after { display: none !important; }
+  .p0844 .rail-label, .p0844 .rail-note { display: none !important; }
+  .p0844 #stage-nav { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto !important; }
+  .p0844 #stage-nav button { width: auto !important; border-left: 0 !important; border-bottom: 2px solid transparent !important; white-space: nowrap; }
+  .p0844 #stage-nav button[aria-pressed="true"] { border-bottom-color: var(--accent) !important; }
+  .p0844 .toolbar { padding: 16px 14px !important; }
+  .p0844 .toolbar h1 { font-size: clamp(22px,8vw,38px); }
+  .p0844 main { padding: 8px !important; }
+  .p0844 .kpis { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  .p0844 .metric:nth-child(2) { transform: none !important; }
+  .p0844 .panel, .p0844 .metric { min-width: 0 !important; }
+  .p0844 .table-wrap { max-width: 100%; overflow-x: auto; }
+}
